@@ -109,29 +109,44 @@ const Generator = () => {
         <div className="flex p-10">
           <strong className="text-3xl m-5 ">Enter Country: </strong>
           <input
-            className="input input-ghost w-full max-w-xs m-5"
-            type="text"
-            placeholder="Country name"
-            onChange={(e) => setDestination(e.target.value)}
-          />
+                id="username"
+                name="username"
+                type="text"
+                class="border-b border-gray-300 py-1 focus:border-b-2 focus:border-yellow-300 transition-colors focus:outline-none peer bg-inherit"
+                onChange={(e) => setDestination(e.target.value)}
+              />
+              <label
+                for="username"
+                class="absolute left-0 top-1 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-yellow-300"
+                >Country/City name</label>
         </div>
         <div className="flex p-10">
           <strong className="text-3xl m-5">Enter Your Budget: </strong>
           <input
-            type="text"
-            placeholder="Type here"
-            className="input input-ghost w-full max-w-xs m-5"
-            onChange={(e) => setBudget(e.target.value)}
-          />
+                id="username"
+                name="username"
+                type="text"
+                class="border-b border-gray-300 py-1 focus:border-b-2 focus:border-yellow-300 transition-colors focus:outline-none peer bg-inherit"
+                onChange={(e) => setBudget(e.target.value)}
+              />
+              <label
+                for="username"
+                class="absolute left-0 top-1 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-yellow-300"
+                >Budget</label>
         </div>
         <div className="flex p-10">
           <strong className="text-3xl m-5">Enter Currency: </strong>
           <input
-            type="text"
-            placeholder="Type here"
-            className="input input-ghost w-full max-w-xs m-5"
-            onChange={(e) => setCurrency(e.target.value)}
-          />
+                id="username"
+                name="username"
+                type="text"
+                class="border-b border-gray-300 py-1 focus:border-b-2 focus:border-yellow-300 transition-colors focus:outline-none peer bg-inherit"
+                onChange={(e) => setCurrency(e.target.value)}
+              />
+              <label
+                for="username"
+                class="absolute left-0 top-1 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-yellow-300"
+                >Currency</label>
         </div>
         <div className="flex p-10" style={{ display: depDisplay }}>
           <strong className="text-3xl m-5">Enter Date of Departure: </strong>
@@ -154,11 +169,16 @@ const Generator = () => {
         <div className="flex p-10">
           <strong className="text-3xl m-5">Describe what kind of trip you want: </strong>
           <input
-            list="types"
-            placeholder="Type here"
-            className="input input-ghost w-full max-w-xs m-5"
-            onChange={(e) => setPreference(e.target.value)}
-          />
+                id="username"
+                name="username"
+                type="text"
+                class="border-b border-gray-300 py-1 focus:border-b-2 focus:border-yellow-300 transition-colors focus:outline-none peer bg-inherit"
+                onChange={(e) => setPreference(e.target.value)}
+              />
+              <label
+                for="username"
+                class="absolute left-0 top-1 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-yellow-300"
+                >Type of trip</label>
           <datalist id="types">
             {types.map((element, index) => {
               return <option value={element} key={index}>{element}</option>
@@ -168,11 +188,16 @@ const Generator = () => {
         <div className="flex p-10">
           <strong className="text-3xl m-5">Enter length of trip: </strong>
           <input
-            type="text"
-            placeholder="Type here"
-            className="input input-ghost w-full max-w-xs m-5"
-            onChange={(e) => setLength(e.target.value)}
-          />
+                id="username"
+                name="username"
+                type="text"
+                class="border-b border-gray-300 py-1 focus:border-b-2 focus:border-yellow-300 transition-colors focus:outline-none peer bg-inherit"
+                onChange={(e) => setLength(e.target.value)}
+              />
+              <label
+                for="username"
+                class="absolute left-0 top-1 cursor-text peer-focus:text-xs peer-focus:-top-4 transition-all peer-focus:text-yellow-300"
+                >Length of trip</label>
         </div>
 
 
