@@ -18,6 +18,8 @@ const Generator = () => {
   const [length,setLength] = useState("");
   const contentRef = useRef(null);
 
+  const types = ['Relaxing', 'Adventurous', 'Dangerous', 'Informative', 'Beach vacation', 'City break', 'Cultural immersion', 'Family vacation', 'Food and wine tour', 'Hiking and nature', 'Luxury getaway', 'Romantic escape', 'Skiing and snowboarding', 'Solo travel', 'Spa and wellness retreat', 'Wildlife safari', 'Yoga and meditation retreat', 'Volunteer and service trip']
+
   let depDisplay = !cookies.email ? "none" : "block";
 
   const genAI = new GoogleGenerativeAI(
@@ -25,7 +27,7 @@ const Generator = () => {
   );
 
   async function run(sentence) {
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     const result = await model.generateContent(sentence);
     const response = await result.response;
@@ -152,11 +154,16 @@ const Generator = () => {
         <div className="flex p-10">
           <strong className="text-3xl m-5">Describe what kind of trip you want: </strong>
           <input
-            type="text"
+            list="types"
             placeholder="Type here"
             className="input input-ghost w-full max-w-xs m-5"
             onChange={(e) => setPreference(e.target.value)}
           />
+          <datalist id="types">
+            {types.map((element, index) => {
+              return <option value={element} key={index}>{element}</option>
+            })}
+          </datalist>
         </div>
         <div className="flex p-10">
           <strong className="text-3xl m-5">Enter length of trip: </strong>

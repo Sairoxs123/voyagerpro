@@ -25,7 +25,7 @@ const AdminLogin = () => {
 
       <br /><br />
 
-      <button onClick={() => login()} type="button">Login</button>
+      <button onClick={() => login()} type="button" className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-md">Login</button>
     </div>
   );
 };
