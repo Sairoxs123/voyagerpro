@@ -23,7 +23,7 @@ const Generator = () => {
   let depDisplay = !cookies.email ? "none" : "block";
 
   const genAI = new GoogleGenerativeAI(
-    "AIzaSyAzsqBT9wCN03wqE3T3FtbfI11Pe1W71H0"
+    "AIzaSyCWJ8CdUHoKbma0q47KeGdvTB077FvaTr0"
   );
 
   async function run(sentence) {
