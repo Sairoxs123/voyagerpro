@@ -9,7 +9,7 @@ const Navbar = () => {
 
   return (
     <div>
-      <div className="navbar bg-black relative z-10"> {/* Added relative positioning and z-index */}
+      <div className="navbar relative z-10"> 
         <div className="">
           <button className="btn btn-square btn-ghost mr-5" onClick={toggleMenu}>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-5 h-5 stroke-current">

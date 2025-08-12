@@ -16,7 +16,7 @@ const Contact = () => {
     const new_date = new Date();
     const date = `${new_date.getDate()}-${new_date.getMonth()}-${new_date.getFullYear()}`
 
-    const response = await axios.get(`http://127.0.0.1:8000/api/contact/add/?name=${name}&email=${email}&message=${message}&date=${date}`)
+    const response = await axios.get(`https://mayank518.pythonanywhere.com/api/contact/add/?name=${name}&email=${email}&message=${message}&date=${date}`)
     .then(res => {
       setSuccess(JSON.parse(res.data.success))
       setName(""); setEmail(""); setMessage("")

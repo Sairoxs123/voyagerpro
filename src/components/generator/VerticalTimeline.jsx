@@ -13,9 +13,9 @@ const VerticalTimeline = (props) => {
 
         if (topBox < triggerBottom) {
           box.classList.add("show");
-        } else {
+        } /*else {
           box.classList.remove("show");
-        }
+        }*/
       });
     };
 
@@ -31,7 +31,7 @@ const VerticalTimeline = (props) => {
 
   return (
     <section id="timeline" className="text-white">
-      <h2 className="heading">Responsive Timeline</h2>
+      <h2 className="heading">Your Iterinary</h2>
       <ul>
         {data.map((element) => {
           return (
