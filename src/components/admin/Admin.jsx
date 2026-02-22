@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
-import axios from "axios";
+import api from "../../utils/api";
 
 const Admin = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
@@ -8,12 +8,13 @@ const Admin = () => {
   const [messages, setMessages] = useState("");
 
   const getMessages = async () => {
-    const response = await axios
-      .get(`https://mayank518.pythonanywhere.com/api/contact/fetch/`)
-      .then((res) => {
-        setTemp(res.data.messages);
-        setMessages(res.data.messages);
-      });
+    try {
+      const res = await api.get("/api/contact/fetch/");
+      setTemp(res.data.messages);
+      setMessages(res.data.messages);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {
@@ -24,13 +25,14 @@ const Admin = () => {
   }, []);
 
   const deleteMessage = async (id) => {
-    let temp = messages.filter((element) => element.id !== id);
-    setMessages(temp.length == 0 ? "" : temp);
-    const response = await axios
-      .get(`https://mayank518.pythonanywhere.com/api/contact/delete/?id=${id}`)
-      .then((res) => {
-        getMessages();
-      });
+    let filtered = messages.filter((element) => element.id !== id);
+    setMessages(filtered.length === 0 ? "" : filtered);
+    try {
+      await api.get(`/api/contact/delete/?id=${id}`);
+      getMessages();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const handleLogout = () => {

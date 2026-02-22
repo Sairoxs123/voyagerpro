@@ -2,9 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
 import { ParallaxProvider, Parallax } from 'react-scroll-parallax'; // Import ParallaxProvider
 import { SignIn, SignUp, Hero, Navbar, Subscription, Footer, Generator, Cards, Faqs, Dashboard, Viewplan, Contact, AdminLogin, Admin, Message } from './components';
-
 import { useInView } from 'react-intersection-observer';
-import { Flight, StarsCanvas } from './components/canvas';
+import { Flight } from './components/canvas';
 
 function FadeInSection({ children }) {
   const [ref, inView] = useInView({
@@ -23,7 +22,7 @@ function App() {
   return (
     <div className='justify-center items-center'>
       <Router>
-       
+
         <ParallaxProvider>
           <Routes>
             <Route path="/signup" element={<SignUp style={{ backgroundColor: '#1a1a1a' }} />} />
@@ -42,10 +41,10 @@ function App() {
                 </Parallax>
                 <Parallax speed={-5}>
                   <div className='grid grid-cols-2'>
-                    <FadeInSection> 
+                    <FadeInSection>
                       <Flight style={{ backgroundColor: '#2a2a2a' }} />
                     </FadeInSection>
-                    <FadeInSection> 
+                    <FadeInSection>
                       <Hero style={{ backgroundColor: '3a3a3a' }} />
                     </FadeInSection>
                   </div>

@@ -1,7 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import axios from "axios";
-import { useCookies } from "react-cookie";
+import api, { setAuth } from "../../utils/api";
 
 const SignUp = () => {
 
@@ -10,7 +9,6 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [dob, setDob] = useState("");
   const [message, setMessage] = useState("");
-  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
 
   const submit = async () => {
 
@@ -18,20 +16,16 @@ const SignUp = () => {
       return setMessage("Please fill out all fields.");
     }
 
-
-    const response = await axios
-      .get(
-        `https://mayank518.pythonanywhere.com/api/signup/?name=${name}&email=${email}&password=${password}&dob=${dob}`
-      )
-      .then((res) => {
-        setMessage(res.data.message);
-        if (res.data.message == "You have signed up successfully.") {
-          setCookie("name", name);
-          setCookie("email", email);
-          setCookie("logged_in", true);
-          window.location.href = "/dashboard";
-        }
-      });
+    try {
+      const res = await api.post("/api/signup/", { name, email, password, dob });
+      setMessage(res.data.message);
+      if (res.data.message === "You have signed up successfully.") {
+        setAuth(res.data.token, res.data.name, res.data.email);
+        window.location.href = "/dashboard";
+      }
+    } catch (err) {
+      setMessage("An error occurred. Please try again.");
+    }
   };
 
     return (

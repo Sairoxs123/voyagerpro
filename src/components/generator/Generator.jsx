@@ -1,9 +1,7 @@
 import React, { useState, useRef } from "react";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import "./generator.css";
 import VerticalTimeline from "./VerticalTimeline";
-import { useCookies } from "react-cookie";
-import axios from "axios";
+import api, { isLoggedIn } from "../../utils/api";
 
 const Generator = () => {
   const [destination, setDestination] = useState("");
@@ -13,72 +11,49 @@ const Generator = () => {
   const [loader, setLoader] = useState("");
   const [preference,setPreference] = useState("");
   const [departure, setDeparture] = useState("");
-  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const [current, setCurrent] = useState("");
   const [length,setLength] = useState("");
   const contentRef = useRef(null);
 
   const types = ['Relaxing', 'Adventurous', 'Dangerous', 'Informative', 'Beach vacation', 'City break', 'Cultural immersion', 'Family vacation', 'Food and wine tour', 'Hiking and nature', 'Luxury getaway', 'Romantic escape', 'Skiing and snowboarding', 'Solo travel', 'Spa and wellness retreat', 'Wildlife safari', 'Yoga and meditation retreat', 'Volunteer and service trip']
 
-  let depDisplay = !cookies.email ? "none" : "block";
+  let depDisplay = !isLoggedIn() ? "none" : "block";
 
-  const genAI ("rowifb"
-  );
+  async function run() {
+    const payload = {
+      destination,
+      budget,
+      currency,
+      preference,
+      length,
+      departure,
+      current,
+      logged_in: isLoggedIn(),
+    };
 
-  async function run(sentence) {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    try {
+      const endpoint = isLoggedIn() ? "/api/generate/auth/" : "/api/generate/";
+      const res = await api.post(endpoint, payload);
 
-    const result = await model.generateContent(sentence);
-    const response = await result.response;
-    let text = await response.text();
-    text = text.replaceAll("`", "");
-    text = text.replaceAll("#", "");
-    text = text.replace("html", "");
-
-    let raw = text.split("</div>")
-
-    let blah = []
-
-    for (let i = 0; i < raw.length; i ++) {
-      let temp = raw[i]
-      temp = raw[i].replaceAll("\n", "")
-      if (temp.trim() == "") {
-        continue
+      if (res.data.text) {
+        let text = res.data.text;
+        let raw = text.split("</div>");
+        let blah = [];
+        for (let i = 0; i < raw.length; i++) {
+          let temp = raw[i].replaceAll("\n", "");
+          if (temp.trim() === "") continue;
+          blah.push(temp);
+        }
+        setData(blah);
       } else {
-        blah.push(temp)
+        alert(res.data.message || "Failed to generate plan.");
       }
+    } catch (err) {
+      alert("Error generating plan. Please try again.");
+      console.error(err);
     }
 
-    setData(blah);
     setLoader("");
-
-    if (depDisplay == "block") {
-      if (!departure || !current) {
-        return alert("Please fill all fields");
-      }
-      const title = `${current} to ${destination} with budget of ${budget} ${currency}`;
-      const date = new Date();
-      const response = await axios
-        .post(
-          `https://mayank518.pythonanywhere.com/api/save/plan/`,
-          {
-            email: cookies.email,
-            plan: text,
-            title: title,
-            date: `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}`,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        .then((res) => {
-          console.log(res.data.saved);
-        })
-        .catch((err) => console.log(err));
-    }
-
   }
 
     const generate = () => {
@@ -87,9 +62,10 @@ const Generator = () => {
       return;
     }
 
-    const sentence = !cookies.email
-    ? `Generate a day wise iterinary for a trip to ${destination} with a budget of ${budget} ${currency} in the form of html code within a div element without using id attribute for any of the elements with a budget summary and use iframe with google maps api for showing location of some of the places mentioned in the plan without output and also add a exciting tagline to each day and make sure to generate maps with respect to each day and also keep your response pattern the same for every propmt never change the pattern also generate your response according to the preference ${preference} and make the itinerary for this ${length} time and give the plans for each day in different single div elements with className="box" react attribute and dont use bootstrap`
-    : `Generate a day wise itinerary for a trip to ${destination} with a budget of ${budget} ${currency} in the form of html code without using id attribute for any of the elements with a budget summary and use iframe with google maps api for showing location of some of the places mentioned in the plan without output and also add a exciting tagline to each day and make sure to generate maps with respect to each day and also keep your response pattern the same for every propmt never change the pattern also generate your response according to the preference ${preference} and make the itinerary for this ${length} time generate a list of planes departing on ${departure} from ${current} to ${destination} in the form of a proper html table with deparute time in GST and flight number with links to the main page of websites of the airlines in the table and also give a list of hotels in the location in an html table with links to their websites in the table without output and give the plans for each day in different div elements react attribute and also give the flights and hotels in different div elements and dont use bootstrap`
+    if (isLoggedIn() && (!departure || !current)) {
+      alert("Please fill all fields");
+      return;
+    }
 
     setLoader(
       <div className="p-3 animate-spin drop-shadow-2xl bg-gradient-to-bl from-yellow-400 via-orange-400 to-red-600 md:w-48 md:h-48 h-32 w-32 aspect-square rounded-full">
@@ -99,7 +75,7 @@ const Generator = () => {
 
     setData("");
 
-    run(sentence);
+    run();
   };
 
   return (

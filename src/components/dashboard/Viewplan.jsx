@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import api from "../../utils/api";
 import VerticalTimeline from "./VerticalTimeline";
 
 const Viewplan = () => {
@@ -9,27 +9,22 @@ const Viewplan = () => {
   const [plan, setPlan] = useState("");
 
   const getPlan = async () => {
-    const response = await axios
-      .get(`https://mayank518.pythonanywhere.com/api/get/plan/?id=${id}`)
-      .then((res) => {
-        console.log(true)
-        let text = res.data.plan
-        let raw = text.split("</div>")
+    try {
+      const res = await api.get(`/api/get/plan/?id=${id}`);
+      let text = res.data.plan;
+      let raw = text.split("</div>");
 
-        let blah = []
+      let blah = [];
+      for (let i = 0; i < raw.length; i++) {
+        let temp = raw[i].replaceAll("\n", "");
+        if (temp.trim() === "") continue;
+        blah.push(temp);
+      }
 
-        for (let i = 0; i < raw.length; i ++) {
-          let temp = raw[i]
-          temp = raw[i].replaceAll("\n", "")
-          if (temp.trim() == "") {
-            continue
-          } else {
-            blah.push(temp)
-          }
-        }
-
-        setPlan(blah);
-      });
+      setPlan(blah);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {

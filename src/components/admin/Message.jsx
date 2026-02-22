@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../utils/api";
 
 const Message = () => {
   const { id } = useParams();
@@ -9,17 +9,21 @@ const Message = () => {
   const [message, setMessage] = useState("");
 
   const getMessage = async () => {
-    const response = await axios
-      .get(`https://mayank518.pythonanywhere.com/api/contact/view/?id=${id}`)
-      .then((res) => setMessage(res.data.message));
+    try {
+      const res = await api.get(`/api/contact/view/?id=${id}`);
+      setMessage(res.data.message);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const edit = async (id) => {
-    const response = await axios
-      .get(`https://mayank518.pythonanywhere.com/api/contact/edit/?id=${id}`)
-      .then((res) => {
-        getMessage();
-      });
+    try {
+      await api.get(`/api/contact/edit/?id=${id}`);
+      getMessage();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {

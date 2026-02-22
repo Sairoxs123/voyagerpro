@@ -1,13 +1,13 @@
 import React from "react";
-import { useCookies } from "react-cookie";
+import { isLoggedIn, getUser, clearAuth } from "../../utils/api";
 
 const Home = () => {
-  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
 
-  if (!cookies.name == true || !cookies.logged_in == true) {
-    console.log(false);
+  if (!isLoggedIn()) {
     return (window.location.href = "/signin");
   }
+
+  const user = getUser();
 
   function upperCaseFirstLetters(str) {
     return str
@@ -17,21 +17,20 @@ const Home = () => {
   }
 
   const logout = () => {
-    removeCookie("name");
-    removeCookie("logged_in");
-    removeCookie("email")
+    clearAuth();
     return (window.location.href = "/signin");
   };
 
   return (
     <div>
-      <h1>{upperCaseFirstLetters(cookies.name)}</h1>
+      <h1>{upperCaseFirstLetters(user.name)}</h1>
 
       <button type="button" onClick={logout}>
         Log out
       </button>
     </div>
   );
+};
 };
 
 export default Home;

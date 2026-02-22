@@ -1,49 +1,47 @@
 import React from "react";
-import { useCookies } from "react-cookie";
-import axios from "axios";
+import api, { isLoggedIn, getUser, clearAuth } from "../../utils/api";
 import { useState, useEffect } from "react";
 
 const Dashboard = () => {
-  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   const [plans, setPlans] = useState("");
 
-  const getPlans = async () => {
-    const response = await axios
-      .get(`https://mayank518.pythonanywhere.com/api/get/plans/?email=${cookies.email}`)
-      .then((res) => {
-        setPlans(res.data.plans);
-      });
+  const fetchPlans = async () => {
+    try {
+      const res = await api.get("/api/get/plans/");
+      setPlans(res.data.plans);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {
-    getPlans();
+    if (!isLoggedIn()) {
+      return (window.location.href = "/signin");
+    }
+    fetchPlans();
   }, []);
 
-  if (!cookies.name == true || !cookies.logged_in == true) {
-    console.log(false);
+  if (!isLoggedIn()) {
     return (window.location.href = "/signin");
   }
 
   const handleLogout = () => {
-    removeCookie("name");
-    removeCookie("logged_in");
-    removeCookie("email");
+    clearAuth();
     return (window.location.href = "/signin");
   };
 
   const deletePlan = async (id) => {
-    const response = await axios.get(
-      `https://mayank518.pythonanywhere.com/api/delete/plan/?id=${id}`
-    ).then(
-      res => {
-        if (res.data.deleted == "yes") {
-          getPlans()
-        } else {
-          alert("An error has occurred. Please try again later.")
-        }
+    try {
+      const res = await api.get(`/api/delete/plan/?id=${id}`);
+      if (res.data.deleted === "yes") {
+        fetchPlans();
+      } else {
+        alert("An error has occurred. Please try again later.");
       }
-    )
-  }
+    } catch (err) {
+      alert("An error has occurred. Please try again later.");
+    }
+  };
 
   return (
     <div className="dashboard h-screen">

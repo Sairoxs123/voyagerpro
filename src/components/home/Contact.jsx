@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { EarthCanvas } from "../canvas/index";
 import { SectionWrapper } from "../../hoc";
 import { slideIn } from "../../utils/motion";
-import axios from "axios"
+import api from "../../utils/api";
 
 const Contact = () => {
   const [name, setName] = useState("")
@@ -16,11 +16,13 @@ const Contact = () => {
     const new_date = new Date();
     const date = `${new_date.getDate()}-${new_date.getMonth()}-${new_date.getFullYear()}`
 
-    const response = await axios.get(`https://mayank518.pythonanywhere.com/api/contact/add/?name=${name}&email=${email}&message=${message}&date=${date}`)
-    .then(res => {
-      setSuccess(JSON.parse(res.data.success))
-      setName(""); setEmail(""); setMessage("")
-    })
+    try {
+      const res = await api.post("/api/contact/add/", { name, email, message, date });
+      setSuccess(res.data.success);
+      setName(""); setEmail(""); setMessage("");
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   return (
